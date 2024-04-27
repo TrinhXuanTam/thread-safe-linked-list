@@ -36,10 +36,10 @@ public class LinkedListService<T> {
     }
 
     /**
-     * Removes the first occurrence of an element from the linked list.
+     * Removes the last element from the linked list.
      * 
-     * @param element The element to be removed
-     * @throws NoSuchElementException If the specified element is not found
+     * @return The removed element
+     * @throws IllegalStateException If the list is empty
      */
     public T removeLast() throws IllegalStateException {
         return list.pop();

@@ -20,16 +20,34 @@ import lombok.Setter;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    /**
+     * Handles NoSuchElementException exceptions thrown.
+     * 
+     * @param ex The exception
+     * @return The response entity with the error details
+     */
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException ex) {
         return new ResponseEntity<>(new ErrorResponse("Element not found", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles IllegalStateException exceptions thrown.
+     * 
+     * @param ex The exception
+     * @return The response entity with the error details
+     */
     @ExceptionHandler(IllegalStateException.class)
     protected ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException ex) {
         return new ResponseEntity<>(new ErrorResponse("Illegal state", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles all other exceptions.
+     * 
+     * @param ex The exception
+     * @return The response entity with the error details
+     */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
         return new ResponseEntity<>(new ErrorResponse("Internal server error", ex.getMessage()),

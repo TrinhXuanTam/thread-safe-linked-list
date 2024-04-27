@@ -29,7 +29,7 @@ public class LinkedListController {
     /**
      * Adds an element to the end of the linked list.
      * 
-     * @param element The element to be added
+     * @param dto The data transfer object containing the element to be added
      * @return The updated list of elements
      */
     @PostMapping("/add")
@@ -42,8 +42,8 @@ public class LinkedListController {
     /**
      * Inserts an element after a specified element in the linked list.
      * 
-     * @param element The element to be inserted
-     * @param after   The element after which the new element should be inserted
+     * @param dto The data transfer object containing the element to be inserted and
+     *            the element after which it should be inserted
      * @return The updated list of elements
      */
     @PostMapping("/insertAfter")
@@ -54,9 +54,8 @@ public class LinkedListController {
     }
 
     /**
-     * Removes the first occurrence of an element from the linked list.
+     * Removes the last element from the linked list.
      * 
-     * @param element The element to be removed
      * @return The updated list of elements
      */
     @DeleteMapping("/pop")
@@ -67,10 +66,9 @@ public class LinkedListController {
     }
 
     /**
-     * Removes all occurrences of an element from the linked list.
+     * Gets all elements in the linked list.
      * 
-     * @param element The element to be removed
-     * @return The updated list of elements
+     * @return The list of elements
      */
     @GetMapping("/all")
     public ResponseEntity<ListDTO<Integer>> getAllElements() {
