@@ -3,6 +3,7 @@ package com.trinhxuantam.threadsafesinglylinkedlist.utils.collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -89,6 +90,8 @@ public class SinglyLinkedList<T> {
 
     private final Node head; // Head node of the list
 
+    private final AtomicInteger size; // Atomic integer to store the size of the list
+
     private final AtomicReference<Node> tail; // Atomic reference to the tail node
 
     /**
@@ -99,6 +102,7 @@ public class SinglyLinkedList<T> {
     public SinglyLinkedList() {
         head = new Node();
         tail = new AtomicReference<>(head);
+        size = new AtomicInteger(0);
     }
 
     /**
@@ -115,6 +119,24 @@ public class SinglyLinkedList<T> {
             current = current.getNext();
         }
         return items;
+    }
+
+    /**
+     * Checks if the list is empty.
+     * 
+     * @return true if the list is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return size.get() == 0;
+    }
+
+    /**
+     * Returns the number of elements in the list.
+     * 
+     * @return the number of elements in the list
+     */
+    public int size() {
+        return size.get();
     }
 
     /**
@@ -140,6 +162,7 @@ public class SinglyLinkedList<T> {
                     if (curTail.compareAndSetNext(null, newNode)) {
                         // Try to update the tail to point to the new node
                         tail.compareAndSet(curTail, newNode);
+                        size.incrementAndGet(); // Increment the size of the list
                         return;
                     }
                 }
@@ -172,6 +195,7 @@ public class SinglyLinkedList<T> {
                     newNode.setNext(nextNode); // Point the new node to the current node's next node
                     // Try to set the current node's next to the new node atomically
                     if (current.compareAndSetNext(nextNode, newNode)) {
+                        size.incrementAndGet(); // Increment the size of the list
                         return; // Return if insertion is successful
                     }
                 }
@@ -203,15 +227,21 @@ public class SinglyLinkedList<T> {
 
             Node secondLast = head; // Start with the dummy head node
             // Iterate to find the last and second-to-last elements
-            while (last.getNext() != null) {
+            while (last != null && last.getNext() != null) {
                 secondLast = last; // Keep track of the second-to-last element
                 last = last.getNext(); // Move to the next node
+            }
+
+            if (last == null) {
+                // If the last node is null, retry the operation
+                continue;
             }
 
             // Try to detach the last node, else retry
             if (secondLast.compareAndSetNext(last, null)) {
                 // If successful, check if we need to reset the tail
                 tail.compareAndSet(last, secondLast);
+                size.decrementAndGet(); // Decrement the size of the list
                 return last.getItem(); // Return the item of the last node
             }
         }

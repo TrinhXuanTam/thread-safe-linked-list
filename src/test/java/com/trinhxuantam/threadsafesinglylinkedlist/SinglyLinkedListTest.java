@@ -110,4 +110,19 @@ public class SinglyLinkedListTest {
         assertThrowsExactly(NoSuchElementException.class, () -> list.insertAfter(10, 20));
         assertEquals(expected, list.getAll());
     }
+
+    /**
+     * Tests the {@code size} method to ensure it returns the correct size of the
+     * list.
+     */
+    @Test
+    public void testSize() {
+        assertEquals(0, list.size());
+        list.push(1);
+        assertEquals(1, list.size());
+        list.push(2);
+        assertEquals(2, list.size());
+        list.pop();
+        assertEquals(1, list.size());
+    }
 }
