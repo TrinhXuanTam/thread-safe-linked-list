@@ -10,7 +10,7 @@ the following operations:
 - pop: Removes the last element from the list
 - insertAfter: Inserts an element after a given element
 
-The full implementation can be found in the `utils/collections/SinglyLinkedList.Java` folder.
+The full implementation can be found in the `utils/collections/SinglyLinkedList.Java` file.
 
 ## Getting Started
 
